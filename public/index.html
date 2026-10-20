@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MobiNav — Make your mobile store feel like an app</title>
+  <meta name="description" content="Turn your mobile storefront into a faster, more intuitive shopping experience with bottom navigation, story collections, and sticky add-to-cart.">
+  <meta name="robots" content="index,follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/images/mobinav-app-icon.png">
+  <link rel="apple-touch-icon" href="/images/mobinav-app-icon.png">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body id="top">
+
+<!-- Ambient background glow elements -->
+<div class="ambient-glow glow-1" aria-hidden="true"></div>
+<div class="ambient-glow glow-2" aria-hidden="true"></div>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top">
+      <img src="/images/mobinav-logo.svg" alt="Mobinav" class="brand-logo-img">
+    </a>
+
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#transformation">Transformation</a>
+      <a href="#preview" id="navPreviewLink">Live Preview</a>
+      <a href="#how-it-works">How It Works</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="btn primary small btn-with-shopify" href="#cta">
+        <img src="/images/shopify-icon.svg" alt="Shopify" class="btn-shopify-icon">
+        <span>Install on Shopify</span>
+        <span class="arrow">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="wrap hero-wrap">
+      <div class="badge-pill">
+        <img src="/images/shopify-icon.svg" alt="Shopify" class="badge-shopify-icon">
+        <span>Built for Shopify &amp; Mobile Commerce</span>
+      </div>
+
+      <h1>Make your Shopify store <span class="grad">feel like an app.</span></h1>
+      <p class="sub">Turn your mobile storefront into a faster, more intuitive shopping experience—without building an expensive native app.</p>
+
+      <div class="form-container">
+        <form id="form" class="form" novalidate>
+          <div class="field">
+            <div class="field-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <input id="url" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false"
+                   placeholder="Enter your store URL (e.g. allbirds.com)" aria-label="Your store URL" required>
+            <button id="go" class="btn primary" type="submit">Preview my store <span class="arrow">&rarr;</span></button>
+          </div>
+          <p id="error" class="error" role="alert" hidden></p>
+          
+          <div class="form-footer">
+            <span class="hint">No store handy? <button type="button" id="demoLink" class="demo-pill-btn"><span class="dot-online"></span>Try demo store (ATELIER Studio)</button></span>
+          </div>
+
+          <details id="adv" class="adv">
+            <summary>Custom paths? Specify collection &amp; product URLs</summary>
+            <div class="adv-grid">
+              <input id="collUrl" type="text" placeholder="Collection page URL (optional)" autocapitalize="off" spellcheck="false">
+              <input id="prodUrl" type="text" placeholder="Product page URL (optional)" autocapitalize="off" spellcheck="false">
+            </div>
+          </details>
+        </form>
+      </div>
+
+      <!-- Social Proof Avatars -->
+      <div class="social-proof">
+        <div class="avatars">
+          <span class="avatar av-1"></span>
+          <span class="avatar av-2"></span>
+          <span class="avatar av-3"></span>
+        </div>
+        <div class="proof-text">
+          <div class="stars">★★★★★ <strong>4.9 / 5</strong></div>
+          <span>Loved by 1,400+ modern stores</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Transformation Intro -->
+  <section class="transformation wrap" id="transformation">
+    <div class="section-title-wrap">
+      <div class="badge-pill indigo">The Transformation</div>
+      <h2>From mobile website to app-like experience.</h2>
+      <p class="section-sub">Same Shopify store. A completely better way to browse, explore, and shop.</p>
+    </div>
+
+    <div class="features-grid" id="features">
+      <article class="feature-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="16" width="18" height="5" rx="2.5"/><path d="M12 16v-6"/><path d="M8 13l4-3 4 3"/></svg>
+        </div>
+        <h3>App-Like Navigation</h3>
+        <p>Persistent thumb-friendly bottom bar with Account, Search, Home, Shop, and live Cart badge.</p>
+      </article>
+
+      <article class="feature-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+        </div>
+        <h3>Story Collections</h3>
+        <p>Instagram-style circular category highlights right under the header that invite instant taps.</p>
+      </article>
+
+      <article class="feature-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        </div>
+        <h3>1 / 2 / 3 Grid Switcher</h3>
+        <p>Shoppers choose their view density to compare items seamlessly on mobile screens.</p>
+      </article>
+
+      <article class="feature-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <h3>Sticky Add to Cart</h3>
+        <p>Price and purchase button stay locked in view as shoppers scroll down product pages.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Interactive Live Preview Section -->
+  <section id="preview" class="preview" hidden>
+    <div class="preview-head wrap">
+      <div class="preview-title">
+        <div class="live-indicator"><span class="pulse-dot"></span> Live Preview</div>
+        <h2 id="previewStoreHeading">Your store, before &amp; after</h2>
+        <p id="previewHost"></p>
+      </div>
+
+      <div class="tabs-wrapper">
+        <div class="tabs" role="tablist" aria-label="Page Selection">
+          <button class="tab active" role="tab" data-tab="home">Home</button>
+          <button class="tab" role="tab" data-tab="collection">Collection</button>
+          <button class="tab" role="tab" data-tab="product">Product</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile side toggle (visible on narrow screens) -->
+    <div class="side-toggle" id="sideToggle">
+      <button data-side="before">Standard Store</button>
+      <button data-side="after" class="active">With App Features</button>
+    </div>
+
+    <!-- Dual Phone Stage & Side Panels -->
+    <div class="stage-wrapper" id="stageWrapper">
+      <!-- Left Side Panel (Before Features for Home, Collection, and Product Tabs) -->
+      <aside class="stage-side-panel stage-side-left" id="stageSideLeft">
+        <!-- Home Tab: Before Features -->
+        <div class="feature-pills-wrap before-features" id="homeBeforeFeatures">
+          <div class="feature-badge before">Before</div>
+          <div class="feature-pill-card before">
+            <span class="pill-icon cross">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+            <span class="pill-text">Navigations</span>
+          </div>
+          <div class="feature-pill-card before">
+            <span class="pill-icon cross">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+            <span class="pill-text">Smart search</span>
+          </div>
+          <div class="feature-pill-card before">
+            <span class="pill-icon cross">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+            <span class="pill-text">Fast discovery</span>
+          </div>
+        </div>
+
+        <!-- Collection Tab: Before Features -->
+        <div class="feature-pills-wrap before-features" id="collectionBeforeFeatures" style="display: none;">
+          <div class="feature-badge before">Before</div>
+          <div class="feature-pill-card before">
+            <span class="pill-icon cross">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+            <span class="pill-text">Limited discovery</span>
+          </div>
+          <div class="feature-pill-card before">
+            <span class="pill-icon cross">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+            <span class="pill-text">Plain browsing experience</span>
+          </div>
+          <div class="feature-pill-card before">
+            <span class="pill-icon cross">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+            <span class="pill-text">No quick navigation</span>
+          </div>
+        </div>
+
+        <!-- Product Tab: Before Features -->
+        <div class="feature-pills-wrap before-features" id="productBeforeFeatures" style="display: none;">
+          <div class="feature-badge before">Before</div>
+          <div class="feature-pill-card before">
+            <span class="pill-icon cross">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+            <span class="pill-text">Not Always Visible</span>
+          </div>
+          <div class="feature-pill-card before">
+            <span class="pill-icon cross">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+            <span class="pill-text">More Steps to Buy</span>
+          </div>
+          <div class="feature-pill-card before">
+            <span class="pill-icon cross">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+            <span class="pill-text">Difficult on Mobile</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Dual Phone Stage (Centered across all 3 tabs) -->
+      <div class="stage" id="stage"></div>
+
+      <!-- Right Side Panel (Nav Styles on Home Tab / After Features on Collection Tab) -->
+      <aside class="stage-side-panel stage-side-right" id="stageSideRight">
+        <!-- Home Tab: Navigation Styles Selector Panel -->
+        <div class="nav-styles-panel" id="navStylesPanel">
+          <div class="nav-styles-header">
+            <div class="nav-styles-badge">
+              <span class="sparkle">✦</span>
+              <span>Bottom Navigation</span>
+            </div>
+          </div>
+          <div class="nav-styles-grid" id="navStylesGrid">
+            <!-- Populated by JavaScript with presets -->
+          </div>
+        </div>
+
+        <!-- Collection Tab: After Features -->
+        <div class="feature-pills-wrap after-features" id="collectionAfterFeatures">
+          <div class="feature-badge after">With App Features</div>
+          <div class="feature-pill-card after">
+            <span class="pill-icon check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="pill-text">Story-style collections for easy discovery</span>
+          </div>
+          <div class="feature-pill-card after">
+            <span class="pill-icon check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="pill-text">Bottom navigation + wishlist</span>
+          </div>
+          <div class="feature-pill-card after">
+            <span class="pill-icon check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="pill-text">Mobile mega menu</span>
+          </div>
+        </div>
+
+        <!-- Product Tab: After Features -->
+        <div class="feature-pills-wrap after-features" id="productAfterFeatures" style="display: none;">
+          <div class="feature-badge after">With App Features</div>
+          <div class="feature-pill-card after">
+            <span class="pill-icon check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="pill-text">Always visible</span>
+          </div>
+          <div class="feature-pill-card after">
+            <span class="pill-icon check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="pill-text">Quick to purchase</span>
+          </div>
+          <div class="feature-pill-card after">
+            <span class="pill-icon check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="pill-text">Better mobile UX</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="preview-foot wrap">
+      <span class="note">🔒 Secure live simulator. Not affiliated with the store shown.</span>
+      <span class="foot-btns">
+        <a class="btn small outline" href="#top" id="again">Try another store</a>
+        <a class="btn small primary btn-with-shopify" href="#cta">
+          <img src="/images/shopify-icon.svg" alt="Shopify" class="btn-shopify-icon">
+          <span>Install app on Shopify</span>
+          &rarr;
+        </a>
+      </span>
+    </div>
+  </section>
+
+  <!-- Section 1: Built for Shopify -->
+  <section class="built-shopify wrap" id="built-shopify">
+    <div class="section-title-wrap">
+      <div class="badge-pill indigo">Works with your store</div>
+      <h2>Built for <span class="grad">Shopify.</span></h2>
+    </div>
+
+    <div class="shopify-cards-grid">
+      <article class="shopify-card">
+        <div class="shopify-icon-box shopify-icon-brand-box">
+          <img src="/images/shopify-icon.svg" alt="Shopify" class="shopify-card-svg">
+        </div>
+        <h3>Dawn theme &amp; 2.0</h3>
+        <p>Modern, responsive, and native Shopify design</p>
+      </article>
+
+      <article class="shopify-card">
+        <div class="shopify-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <h3>App embed</h3>
+        <p>Easy integration with your theme</p>
+      </article>
+
+      <article class="shopify-card">
+        <div class="shopify-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <h3>Customise &amp; Preview</h3>
+        <p>See changes in real time</p>
+      </article>
+
+      <article class="shopify-card">
+        <div class="shopify-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        </div>
+        <h3>Boost Conversions</h3>
+        <p>Turn more visitors into customers</p>
+      </article>
+
+      <article class="shopify-card">
+        <div class="shopify-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        </div>
+        <h3>No Coding Required</h3>
+        <p>Set up in minutes</p>
+      </article>
+
+      <article class="shopify-card">
+        <div class="shopify-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3>Lightweight &amp; Fast</h3>
+        <p>Built for performance</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Section 2: Four steps to an app-like storefront -->
+  <section class="how-it-works wrap" id="how-it-works">
+    <div class="section-title-wrap">
+      <div class="badge-pill indigo">How it works</div>
+      <h2>Four steps to an app-like <span class="grad">storefront.</span></h2>
+    </div>
+
+    <div class="steps-timeline">
+      <div class="timeline-line"></div>
+      
+      <div class="step-node">
+        <div class="step-icon-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <span class="step-num">01</span>
+        <h4 class="step-title">Install</h4>
+      </div>
+
+      <div class="step-node">
+        <div class="step-icon-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+        </div>
+        <span class="step-num">02</span>
+        <h4 class="step-title">Customize</h4>
+      </div>
+
+      <div class="step-node">
+        <div class="step-icon-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <span class="step-num">03</span>
+        <h4 class="step-title">Preview</h4>
+      </div>
+
+      <div class="step-node">
+        <div class="step-icon-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <span class="step-num">04</span>
+        <h4 class="step-title">Publish</h4>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Your store stays Shopify -->
+  <section class="store-equation wrap" id="store-equation">
+    <div class="section-title-wrap">
+      <h2>Your store stays Shopify.<br>The experience becomes yours.</h2>
+    </div>
+
+    <div class="equation-row">
+      <!-- Card 1: Shopify -->
+      <div class="equation-card white">
+        <div class="equation-logo-box">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89 101" class="shopify-svg-logo">
+            <path fill="#95BF47" d="M77.667 19.756c-.07-.505-.51-.785-.877-.816-.363-.03-7.482-.139-7.482-.139s-5.954-5.781-6.542-6.37c-.588-.588-1.736-.41-2.183-.277-.006.003-1.118.347-2.99.927a20.969 20.969 0 00-1.433-3.518c-2.12-4.045-5.224-6.184-8.974-6.19h-.014c-.261 0-.52.025-.78.047a11.451 11.451 0 00-.338-.39c-1.635-1.749-3.73-2.6-6.24-2.525-4.844.138-9.668 3.637-13.58 9.851-2.752 4.373-4.847 9.866-5.44 14.119l-9.539 2.954c-2.808.883-2.896.969-3.263 3.616-.271 2-7.618 58.807-7.618 58.807L61.94 100.5l26.683-6.633S77.737 20.26 77.667 19.756zM54.51 14.035l-4.778 1.479c-.036-2.453-.327-5.865-1.47-8.814 3.676.696 5.485 4.855 6.248 7.335zm-7.999 2.477l-10.279 3.183c.994-3.804 2.877-7.591 5.191-10.074.86-.924 2.064-1.953 3.49-2.541 1.34 2.796 1.632 6.755 1.598 9.432zm-6.6-12.784c1.138-.025 2.095.225 2.913.763-1.31.68-2.574 1.657-3.762 2.93-3.076 3.301-5.435 8.426-6.375 13.37-2.933.907-5.801 1.797-8.442 2.613 1.667-7.782 8.19-19.46 15.666-19.676z"/>
+            <path fill="#5E8E3E" d="M76.793 18.943c-.363-.03-7.482-.139-7.482-.139s-5.954-5.782-6.542-6.37c-.22-.219-.516-.333-.827-.38l.003 88.443 26.68-6.63S77.74 20.263 77.67 19.758c-.07-.504-.513-.785-.877-.815z"/>
+            <path fill="#fff" d="M47.152 32.662l-3.099 11.594s-3.456-1.573-7.554-1.315c-6.01.38-6.073 4.17-6.012 5.121.327 5.186 13.969 6.318 14.734 18.463.602 9.555-5.068 16.092-13.239 16.608-9.807.618-15.206-5.166-15.206-5.166l2.078-8.84s5.435 4.101 9.785 3.827c2.841-.18 3.856-2.492 3.754-4.126-.428-6.764-11.536-6.364-12.238-17.478-.59-9.352 5.552-18.83 19.104-19.684 5.221-.336 7.893.996 7.893.996z"/>
+          </svg>
+        </div>
+        <span class="equation-tag">YOUR</span>
+        <h4 class="equation-title">Shopify store</h4>
+      </div>
+
+      <!-- Plus Operator -->
+      <div class="equation-sign">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+
+      <!-- Card 2: MobiNav -->
+      <div class="equation-card white">
+        <div class="equation-logo-box">
+          <img src="/images/mobinav-app-icon.png" alt="MobiNav App Icon" class="mobinav-app-icon-img">
+        </div>
+        <span class="equation-tag">OUR</span>
+        <h4 class="equation-title">Customization App</h4>
+      </div>
+
+      <!-- Equals Operator -->
+      <div class="equation-sign">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/></svg>
+      </div>
+
+      <!-- Card 3: Mobile Experience -->
+      <div class="equation-card purple">
+        <div class="equation-logo-box">
+          <div class="purple-equation-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          </div>
+        </div>
+        <span class="equation-tag light">A BETTER</span>
+        <h4 class="equation-title light">Mobile experience</h4>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta wrap" id="cta">
+    <div class="cta-card">
+      <div class="badge-pill">Ready to get started?</div>
+      <h2>Make your Shopify store feel like an app today.</h2>
+      <p>Give mobile shoppers the seamless experience they expect and convert more visitors into loyal customers.</p>
+      <div class="cta-actions">
+        <a class="btn primary big btn-with-shopify" href="#">
+          <img src="/images/shopify-icon.svg" alt="Shopify" class="btn-shopify-icon big">
+          <span>Install on Shopify</span>
+          <span class="arrow">&rarr;</span>
+        </a>
+        <a class="btn outline big" href="#top">Test Another Store</a>
+      </div>
+      <div class="cta-perks">
+        <span>✓ 7-day free trial</span>
+        <span>✓ 5-minute zero-code setup</span>
+        <span>✓ Compatible with Dawn &amp; 2.0 themes</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <div class="foot-in">
+    <div class="foot-brand">
+      <img src="/images/mobinav-logo.svg" alt="Mobinav" class="foot-logo-img">
+      <p>Turn your mobile store into an app experience. Built for Shopify.</p>
+    </div>
+    <div class="foot-links">
+      <a href="#features">Features</a>
+      <a href="#transformation">Templates</a>
+      <a href="#preview">Live Simulator</a>
+      <a href="#cta">Documentation</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <small>&copy; 2026 MobiNav App Inc. Screenshots are cached securely and automatically deleted after 24 hours.</small>
+  </div>
+</footer>
+
+<!-- Loading State Modal -->
+<div id="loading" class="loading" hidden>
+  <div class="loading-backdrop"></div>
+  <div class="card loading-card">
+    <div class="spinner-ring" aria-hidden="true"></div>
+    <h3>Transforming your store</h3>
+    <p class="loading-sub">Capturing high-resolution mobile pages and generating app features...</p>
+    <ol id="steps">
+      <li>Opening store &amp; removing popups</li>
+      <li>Capturing collection page &amp; categories</li>
+      <li>Capturing product details &amp; pricing</li>
+      <li>Applying navigation &amp; app features</li>
+    </ol>
+    <p id="queueNote" class="queue" hidden></p>
+  </div>
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

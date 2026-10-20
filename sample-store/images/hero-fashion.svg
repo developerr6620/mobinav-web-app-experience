@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <defs>
+    <linearGradient id="heroBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dfd7ce"/>
+      <stop offset="50%" stop-color="#cfc4b7"/>
+      <stop offset="100%" stop-color="#bfb2a3"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="70%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurBehind">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" fill="url(#heroBg)"/>
+  <rect width="1200" height="900" fill="url(#sun)"/>
+  
+  <!-- Architectural curves -->
+  <path d="M0 600 C300 500, 600 700, 1200 550 L1200 900 L0 900 Z" fill="#b3a595" opacity="0.4"/>
+  <circle cx="850" cy="350" r="280" fill="#e8dfd5" opacity="0.5"/>
+  <circle cx="200" cy="200" r="160" fill="#f4eee7" opacity="0.4"/>
+  
+  <!-- Minimalist High Fashion Silhouette in Center -->
+  <g transform="translate(420, 150)">
+    <!-- Hair -->
+    <path d="M120 180 C110 90, 250 90, 240 180 C260 280, 280 440, 250 520 C220 440, 240 320, 220 230 C200 240, 160 240, 140 230 C120 320, 140 440, 110 520 C80 440, 100 280, 120 180 Z" fill="#4d3929"/>
+    <!-- Face / Body -->
+    <path d="M150 170 C150 130, 210 130, 210 170 C210 230, 150 230, 150 170 Z" fill="#ebc1a2"/>
+    <path d="M170 220 L190 220 L195 280 L165 280 Z" fill="#ebc1a2"/>
+    <!-- Coat -->
+    <path d="M70 290 C130 260, 230 260, 290 290 L330 680 L30 680 Z" fill="#24211e"/>
+    <!-- Lapel -->
+    <path d="M140 285 L180 430 L130 460 L100 300 Z" fill="#181513"/>
+    <path d="M220 285 L180 430 L230 460 L260 300 Z" fill="#181513"/>
+  </g>
+  
+  <text x="600" y="820" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="20" font-weight="700" letter-spacing="0.4em" fill="#332c25">ATELIER STUDIO</text>
+</svg>

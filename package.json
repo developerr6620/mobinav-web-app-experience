@@ -1,0 +1,19 @@
+{
+  "name": "store-preview-demo",
+  "version": "1.0.0",
+  "description": "Interactive before/after mobile preview for any ecommerce store (screenshot based)",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "postinstall": "playwright install chromium || echo 'Run: npx playwright install chromium'",
+    "test:demo": "node scripts/test-demo.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "playwright": "^1.48.0"
+  }
+}

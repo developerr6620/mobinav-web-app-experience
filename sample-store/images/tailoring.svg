@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f2ebe4"/>
+      <stop offset="50%" stop-color="#e8ded5"/>
+      <stop offset="100%" stop-color="#d6c8bd"/>
+    </linearGradient>
+    <linearGradient id="suit" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9a8171"/>
+      <stop offset="100%" stop-color="#735d4f"/>
+    </linearGradient>
+    <linearGradient id="suitDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#695446"/>
+      <stop offset="100%" stop-color="#544136"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg2)"/>
+  <circle cx="400" cy="460" r="320" fill="#fdfbf9" opacity="0.6"/>
+  <g>
+    <!-- Soft Tailored Jacket -->
+    <path d="M270 380 C330 350, 470 350, 530 380 L570 860 L230 860 Z" fill="url(#suit)"/>
+    <!-- Fold and Cut -->
+    <path d="M340 370 L400 560 L360 860 L230 860 Z" fill="url(#suitDark)"/>
+    <path d="M460 370 L400 560 L440 860 L570 860 Z" fill="url(#suit)"/>
+    <!-- Silk Camisole Inner -->
+    <path d="M370 420 L430 420 L400 520 Z" fill="#ffffff" opacity="0.9"/>
+    <!-- Minimal lines -->
+    <line x1="330" y1="640" x2="380" y2="640" stroke="#48382e" stroke-width="3"/>
+    <line x1="420" y1="640" x2="470" y2="640" stroke="#48382e" stroke-width="3"/>
+    <!-- Modern belt / waist detail -->
+    <rect x="340" y="580" width="120" height="18" rx="4" fill="#524136"/>
+    <circle cx="400" cy="589" r="6" fill="#d9b48f"/>
+  </g>
+  <text x="400" y="930" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="13" font-weight="600" letter-spacing="0.25em" fill="#8c7768">ATELIER · SOFT TAILORING</text>
+</svg>

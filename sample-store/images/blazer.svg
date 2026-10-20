@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ece8e1"/>
+      <stop offset="50%" stop-color="#ded8ce"/>
+      <stop offset="100%" stop-color="#cfc7ba"/>
+    </linearGradient>
+    <linearGradient id="jacket" x1="0%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#3d3a36"/>
+      <stop offset="100%" stop-color="#23211f"/>
+    </linearGradient>
+    <linearGradient id="lapel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2c2a27"/>
+      <stop offset="100%" stop-color="#181615"/>
+    </linearGradient>
+    <linearGradient id="skin" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f6d3ba"/>
+      <stop offset="100%" stop-color="#e8bd9e"/>
+    </linearGradient>
+    <linearGradient id="hair" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9d7f63"/>
+      <stop offset="100%" stop-color="#6e553e"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#1d1a17" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  
+  <!-- Architectural background element -->
+  <rect x="120" y="80" width="560" height="840" rx="280" fill="#f5f2ec" opacity="0.6"/>
+  <circle cx="680" cy="220" r="140" fill="#e5dfd4" opacity="0.4"/>
+  
+  <!-- Silhouette Model & Drape Blazer -->
+  <g filter="url(#softShadow)">
+    <!-- Hair -->
+    <path d="M300 240 C300 130, 500 130, 500 240 C530 320, 520 480, 500 560 C460 480, 480 340, 470 280 C440 290, 360 290, 330 280 C320 340, 340 480, 300 560 C280 480, 270 320, 300 240 Z" fill="url(#hair)"/>
+    <!-- Face / Neck -->
+    <path d="M360 230 C360 180, 440 180, 440 230 C440 310, 360 310, 360 230 Z" fill="url(#skin)"/>
+    <path d="M380 290 L420 290 L430 390 L370 390 Z" fill="url(#skin)"/>
+    <!-- Collar bone / shirt -->
+    <path d="M360 380 L440 380 L450 450 L350 450 Z" fill="#ffffff"/>
+    
+    <!-- Drape Blazer Body -->
+    <path d="M260 410 C320 380, 480 380, 540 410 L580 880 L220 880 Z" fill="url(#jacket)"/>
+    <!-- Lapels -->
+    <path d="M350 400 L400 580 L350 630 L310 420 Z" fill="url(#lapel)"/>
+    <path d="M450 400 L400 580 L450 630 L490 420 Z" fill="url(#lapel)"/>
+    <path d="M350 630 L400 580 L400 880 L350 880 Z" fill="#1b1a18" opacity="0.4"/>
+    <!-- Button -->
+    <circle cx="400" cy="670" r="7" fill="#111" stroke="#444" stroke-width="2"/>
+    <circle cx="400" cy="740" r="7" fill="#111" stroke="#444" stroke-width="2"/>
+    <!-- Pockets -->
+    <rect x="270" y="690" width="90" height="8" rx="2" fill="#1b1918"/>
+    <rect x="440" y="690" width="90" height="8" rx="2" fill="#1b1918"/>
+  </g>
+  
+  <!-- Subtle brand watermark -->
+  <text x="400" y="940" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="14" font-weight="600" letter-spacing="0.3em" fill="#7a7368">ATELIER STUDIO · COLLECTION 2026</text>
+</svg>

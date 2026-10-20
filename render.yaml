@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: store-preview-demo
+    runtime: docker
+    plan: free        # use "starter" or higher for launch (Chromium needs memory)
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production

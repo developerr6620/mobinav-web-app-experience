@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+  <defs>
+    <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f3f6"/>
+      <stop offset="100%" stop-color="#e2e7ec"/>
+    </linearGradient>
+    <linearGradient id="denim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4a6984"/>
+      <stop offset="50%" stop-color="#3b566f"/>
+      <stop offset="100%" stop-color="#2c4155"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg4)"/>
+  <circle cx="400" cy="500" r="300" fill="#ffffff" opacity="0.6"/>
+  <g>
+    <!-- Relaxed Jeans Silhouette -->
+    <!-- Waistband -->
+    <path d="M280 320 L520 320 L530 380 L270 380 Z" fill="#32495e"/>
+    <rect x="390" y="335" width="20" height="30" fill="#243545"/>
+    <circle cx="400" cy="350" r="6" fill="#cda869"/>
+    <!-- Legs -->
+    <path d="M270 380 L385 460 L380 900 L280 900 L250 560 Z" fill="url(#denim)"/>
+    <path d="M530 380 L415 460 L420 900 L520 900 L550 560 Z" fill="url(#denim)"/>
+    <!-- Stitching details -->
+    <path d="M280 400 C320 440, 360 400, 360 400" stroke="#cda869" stroke-width="2" fill="none" stroke-dasharray="3,3"/>
+    <path d="M520 400 C480 440, 440 400, 440 400" stroke="#cda869" stroke-width="2" fill="none" stroke-dasharray="3,3"/>
+  </g>
+  <text x="400" y="940" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="13" font-weight="600" letter-spacing="0.25em" fill="#475569">ATELIER · EVERYDAY DENIM</text>
+</svg>
