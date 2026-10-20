@@ -69,8 +69,16 @@ async function assertPublicUrl(url, { allowLocal = false } = {}) {
       throw httpError('That address is not allowed.', 400, 'PRIVATE');
     }
     let addrs;
-    try { addrs = await dns.lookup(host, { all: true }); }
-    catch { throw httpError(`We could not find "${host}". Please check the URL.`, 400, 'DNS'); }
+    try {
+      addrs = await dns.lookup(host, { all: true });
+    } catch {
+      const altHost = host.startsWith('www.') ? host.replace(/^www\./i, '') : `www.${host}`;
+      try {
+        addrs = await dns.lookup(altHost, { all: true });
+      } catch {
+        throw httpError(`We could not find "${host}". Please check the URL.`, 400, 'DNS');
+      }
+    }
     if (!addrs.length || addrs.some((a) => isPrivateIp(a.address))) {
       throw httpError('That address is not allowed.', 400, 'PRIVATE');
     }

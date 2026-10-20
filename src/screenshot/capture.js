@@ -22,7 +22,14 @@ async function getBrowser() {
     browserPromise = null;
   }
   browserPromise = chromium
-    .launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] })
+    .launch({
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-blink-features=AutomationControlled'
+      ]
+    })
     .catch((err) => {
       browserPromise = null;
       if (/Executable doesn't exist|browserType\.launch/i.test(err.message)) {
@@ -124,7 +131,9 @@ async function capturePreview(job, setStep) {
     hasTouch: true,
     userAgent: config.USER_AGENT,
     locale: 'en-US',
-    serviceWorkers: 'block',
+  });
+  await context.addInitScript(() => {
+    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
   });
   job.ctx = context;
 
@@ -150,20 +159,54 @@ async function capturePreview(job, setStep) {
   try {
     // 1) HOME
     setStep(0, 'Opening your store');
-    await open(page, job.input.homeUrl);
+    let homeUrl = job.input.homeUrl;
+    try {
+      await open(page, homeUrl);
+    } catch (err) {
+      const u = new URL(homeUrl);
+      const altHost = u.hostname.startsWith('www.') ? u.hostname.replace(/^www\./i, '') : `www.${u.hostname}`;
+      const altUrl = `${u.protocol}//${altHost}${u.pathname}${u.search}`;
+      try {
+        await open(page, altUrl);
+        homeUrl = altUrl;
+      } catch {
+        throw err;
+      }
+    }
     await shot(page, file('home.jpg'));
     images.home = urlOf('home.jpg');
-    const homeUrl = page.url();
+    homeUrl = page.url();
     urls.home = homeUrl;
     const origin = new URL(homeUrl).origin;
     const home = await extractHome(page);
 
     // 2) COLLECTION
     setStep(1, 'Capturing collection page');
-    const collectionUrl =
+    let collectionUrl =
       job.input.collectionUrl ||
       pickLink(home.links, 'collection', homeUrl, [homeUrl]) ||
       (await fromSitemap(context.request, origin, 'collection'));
+
+    // Intelligent fallback for collection page if not found in links or sitemap
+    if (!collectionUrl) {
+      const candidates = [
+        `${origin}/collections/all`,
+        `${origin}/collections`,
+        `${origin}/shop`,
+        `${origin}/products`,
+        `${origin}/catalog`
+      ];
+      for (const cand of candidates) {
+        try {
+          const testRes = await context.request.get(cand, { timeout: 6000 });
+          if (testRes.ok() && testRes.status() === 200) {
+            collectionUrl = cand;
+            break;
+          }
+        } catch { /* continue */ }
+      }
+    }
+
     let collection = null;
     if (collectionUrl) {
       try {
@@ -181,11 +224,18 @@ async function capturePreview(job, setStep) {
 
     // 3) PRODUCT
     setStep(2, 'Capturing product page');
-    const productUrl =
+    let productUrl =
       job.input.productUrl ||
       (collection && pickLink(collection.links, 'product', homeUrl)) ||
       pickLink(home.links, 'product', homeUrl) ||
       (await fromSitemap(context.request, origin, 'product'));
+
+    // Intelligent fallback for product page: inspect collection links for product URLs
+    if (!productUrl && collection && collection.links) {
+      const cand = collection.links.find(l => /\/products?\/[^/?#]+/i.test(l.href) || /\/p\/[^/?#]+/i.test(l.href));
+      if (cand) productUrl = cand.href;
+    }
+
     let product = null;
     if (productUrl) {
       try {

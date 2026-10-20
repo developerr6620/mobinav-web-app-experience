@@ -473,15 +473,93 @@
     window.scrollTo(0, topPos);
   }
 
+  let currentSiteUrl = '';
+
+  function clearCustomUrls() {
+    const coll = $('#collUrl');
+    const prod = $('#prodUrl');
+    const adv = $('#adv');
+    if (coll) coll.value = '';
+    if (prod) prod.value = '';
+    if (adv) adv.open = false;
+  }
+
+  // When user edits/types a new site URL, automatically remove old custom URLs
+  input.addEventListener('input', () => {
+    const val = input.value.trim().toLowerCase();
+    if (val !== currentSiteUrl.toLowerCase()) {
+      clearCustomUrls();
+    }
+  });
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const url = input.value.trim();
     if (!url) { setError('Please enter your store URL.'); input.focus(); return; }
-    startPreview(url, { collectionUrl: $('#collUrl').value.trim(), productUrl: $('#prodUrl').value.trim() });
+
+    const collInput = $('#collUrl');
+    const prodInput = $('#prodUrl');
+    let collectionUrl = collInput ? collInput.value.trim() : '';
+    let productUrl = prodInput ? prodInput.value.trim() : '';
+
+    // If submitting a different store than before, or custom URLs belong to a different domain, clear old custom URLs
+    const isNewSite = currentSiteUrl && url.toLowerCase() !== currentSiteUrl.toLowerCase();
+    if (isNewSite) {
+      clearCustomUrls();
+      collectionUrl = '';
+      productUrl = '';
+    } else {
+      // Validate that custom URLs belong to the same domain as the main store
+      try {
+        const storeDomain = new URL(url.startsWith('http') ? url : `https://${url}`).hostname.replace(/^www\./i, '');
+        if (collectionUrl) {
+          const cDomain = new URL(collectionUrl.startsWith('http') ? collectionUrl : `https://${collectionUrl}`).hostname.replace(/^www\./i, '');
+          if (!cDomain.includes(storeDomain) && !storeDomain.includes(cDomain)) {
+            if (collInput) collInput.value = '';
+            collectionUrl = '';
+          }
+        }
+        if (productUrl) {
+          const pDomain = new URL(productUrl.startsWith('http') ? productUrl : `https://${productUrl}`).hostname.replace(/^www\./i, '');
+          if (!pDomain.includes(storeDomain) && !storeDomain.includes(pDomain)) {
+            if (prodInput) prodInput.value = '';
+            productUrl = '';
+          }
+        }
+      } catch { /* proceed */ }
+    }
+
+    currentSiteUrl = url;
+
+    // Update browser address bar to reflect the current store being previewed
+    try {
+      const pageUrl = new URL(window.location);
+      pageUrl.searchParams.set('url', url);
+      window.history.replaceState({}, '', pageUrl);
+    } catch { /* skip */ }
+
+    startPreview(url, { collectionUrl, productUrl });
   });
-  $('#demoLink').addEventListener('click', (e) => { e.preventDefault(); input.value = 'demo'; form.requestSubmit(); });
+
+  $('#demoLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    clearCustomUrls();
+    input.value = 'demo';
+    form.requestSubmit();
+  });
+
+  const againBtn = $('#again');
+  if (againBtn) {
+    againBtn.addEventListener('click', () => {
+      clearCustomUrls();
+      input.value = '';
+      setError('');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      input.focus();
+    });
+  }
 
   // ?url=mystore.com opens a preview directly
   const qs = new URLSearchParams(location.search).get('url');
-  if (qs) { input.value = qs; startPreview(qs); }
+  if (qs) { input.value = qs; currentSiteUrl = qs; startPreview(qs); }
 })();
