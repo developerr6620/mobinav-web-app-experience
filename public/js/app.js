@@ -263,22 +263,42 @@
     $$('#sideToggle button').forEach((b) => b.classList.toggle('active', b.dataset.side === state.side));
   }
 
-  // ---------- stable phone scale calculation (no zoom out/in shifts) ----------
+  // ---------- Auto-fit phone scale calculation based on BOTH width and height ----------
   function computeScale() {
     const winW = window.innerWidth;
-    if (winW < 520) {
-      return Math.max(0.60, Math.min(0.80, (winW - 40) / PHONE_W));
-    } else if (winW < 750) {
-      return 0.54;
-    } else if (winW < 1000) {
-      return 0.62;
-    } else if (winW < 1250) {
-      return 0.68;
-    } else if (winW < 1440) {
-      return 0.72;
-    } else {
-      return 0.76;
+    const winH = window.innerHeight;
+
+    if (winW < 560) {
+      // Single phone on mobile screens
+      const availW = Math.max(260, winW - 32);
+      const availH = Math.max(340, winH - 180);
+      const sW = availW / PHONE_W;
+      const sH = availH / PHONE_H;
+      return Math.max(0.48, Math.min(0.78, Math.min(sW, sH)));
     }
+
+    // Dual phones mode:
+    // Vertical constraint: nav (72px) + preview-head (~50px) + slot labels (~36px) + bottom margin (~52px) = ~210px
+    const reservedH = 210;
+    const availH = Math.max(300, winH - reservedH);
+    const scaleH = availH / PHONE_H;
+
+    // Horizontal constraint:
+    // Desktop layout (winW >= 960): side panels flank the phones
+    // Tablet layout (560 <= winW < 960): side panels stack below the phones
+    let scaleW;
+    if (winW >= 960) {
+      const isHome = state.tab === 'home';
+      const sidePanelsW = isHome ? 640 : 540;
+      const availWForPhones = Math.max(320, winW - sidePanelsW);
+      scaleW = (availWForPhones - 28) / (PHONE_W * 2);
+    } else {
+      const availWForPhones = Math.max(320, winW - 40);
+      scaleW = (availWForPhones - 20) / (PHONE_W * 2);
+    }
+
+    const s = Math.min(scaleH, scaleW);
+    return Math.max(0.42, Math.min(0.76, s));
   }
 
   function fit() {
@@ -286,7 +306,7 @@
     if (!stage) return;
     const stageWrapper = $('#stageWrapper');
     const winW = window.innerWidth;
-    state.single = winW < 520;
+    state.single = winW < 560;
     const s = computeScale();
 
     stage.classList.toggle('single', state.single);

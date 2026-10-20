@@ -620,11 +620,14 @@ h4 {
   min-height: calc(100vh - 72px);
   display: flex;
   flex-direction: column;
-  padding: 24px 20px 32px;
+  justify-content: center;
+  padding: clamp(8px, 1.5vh, 18px) clamp(10px, 1.8vw, 24px);
   background: #f8fafc;
   border-block: 1px solid var(--border);
   position: relative;
   scroll-margin-top: 72px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .preview[hidden] {
@@ -651,9 +654,11 @@ h4 {
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  padding-bottom: 8px;
-  width: min(1160px, 100%);
+  padding-bottom: clamp(4px, 0.8vh, 8px);
+  width: 100%;
+  max-width: 1440px;
   margin-inline: auto;
+  flex-shrink: 0;
 }
 
 .live-indicator {
@@ -1009,9 +1014,9 @@ h4 {
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 1480px;
+  max-width: 100%;
   margin: 0 auto;
-  min-height: calc(872px * var(--s, 0.74) + 40px);
+  box-sizing: border-box;
 }
 
 /* Center Dual Phone Stage (ALWAYS EXACTLY CENTERED ACROSS ALL 3 TABS) */
@@ -1020,48 +1025,48 @@ h4 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  gap: clamp(16px, 2vw, 32px);
   margin: 0 auto;
 }
 
 /* Side Panels - Flanking the center phones symmetrically on desktop */
-@media (min-width: 1080px) {
+@media (min-width: 960px) {
   .stage-side-panel {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
     z-index: 10;
   }
 
   .stage-side-left {
-    right: calc(50% + var(--stage-half-width, 320px) + 24px);
-    display: flex;
-    flex-direction: column;
+    justify-content: flex-end;
     align-items: flex-end;
   }
 
   .stage-side-right {
-    left: calc(50% + var(--stage-half-width, 320px) + 24px);
-    display: flex;
-    flex-direction: column;
+    justify-content: flex-start;
     align-items: flex-start;
   }
 
   .stage-side-left .feature-pills-wrap {
     align-items: flex-start;
-    margin-right: 40px;
+    margin-right: clamp(12px, 2.2vw, 36px);
   }
 
   .stage-side-right .feature-pills-wrap {
     align-items: flex-start;
-    margin-left: 40px;
+    margin-left: clamp(12px, 2.2vw, 36px);
+  }
+
+  .nav-styles-panel {
+    margin-left: clamp(12px, 2.2vw, 36px);
   }
 }
 
-@media (max-width: 1079px) {
+@media (max-width: 959px) {
   .stage-wrapper {
     flex-direction: column;
-    gap: 28px;
+    gap: 20px;
     align-items: center;
   }
 
@@ -1096,6 +1101,7 @@ h4 {
 
   .nav-styles-panel {
     margin-left: 0;
+    max-width: 410px;
   }
 }
 
@@ -1133,14 +1139,14 @@ h4 {
   background: #ffffff;
   border: 1px solid rgba(226, 232, 240, 0.95);
   border-radius: 999px;
-  padding: 11px 22px 11px 12px;
+  padding: clamp(6px, 0.85vh, 10px) clamp(12px, 1.2vw, 18px) clamp(6px, 0.85vh, 10px) clamp(8px, 1vw, 12px);
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: clamp(8px, 1vw, 12px);
   box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   width: fit-content;
-  max-width: 310px;
+  max-width: min(310px, 100%);
   box-sizing: border-box;
 }
 
@@ -1150,8 +1156,8 @@ h4 {
 }
 
 .pill-icon {
-  width: 32px;
-  height: 32px;
+  width: clamp(26px, 3vh, 32px);
+  height: clamp(26px, 3vh, 32px);
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -1164,8 +1170,8 @@ h4 {
 }
 
 .pill-icon.cross svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   stroke: #ffffff;
 }
 
@@ -1176,35 +1182,36 @@ h4 {
 }
 
 .pill-icon.check svg {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   stroke: #ffffff;
 }
 
 .pill-text {
-  font-size: 14.5px;
+  font-size: clamp(12px, 1.05vw, 14px);
   font-weight: 600;
   color: #1e293b;
-  line-height: 1.32;
+  line-height: 1.3;
   letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
 /* Navigation Styles Panel on Right (Home Tab) */
 .nav-styles-panel {
-  width: 410px;
-  max-width: 410px;
+  width: 100%;
+  max-width: clamp(290px, 25vw, 390px);
   background: #ffffff;
   border: 1.5px solid var(--border);
-  border-radius: 20px;
-  padding: 16px;
-  box-shadow: 0 12px 36px -8px rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  padding: clamp(8px, 1.2vh, 14px);
+  box-shadow: 0 10px 30px -6px rgba(15, 23, 42, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-height: calc(100vh - 170px);
+  gap: clamp(6px, 0.9vh, 10px);
+  max-height: calc(872px * var(--s, 0.65) + 36px);
   overflow-y: auto;
   flex-shrink: 0;
-  margin-left: 40px;
+  box-sizing: border-box;
 }
 
 .nav-styles-header {
@@ -1223,35 +1230,35 @@ h4 {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
 }
 
 .nav-styles-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text);
-  margin: 0 0 3px;
+  margin: 0 0 2px;
 }
 
 .nav-styles-sub {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--text-muted);
   margin: 0;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 
 .nav-styles-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: clamp(6px, 0.8vh, 10px);
 }
 
 .nav-style-card {
   background: #ffffff;
   border: 1.5px solid var(--border);
-  border-radius: 14px;
-  padding: 10px;
+  border-radius: 12px;
+  padding: clamp(6px, 0.9vh, 10px);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
@@ -1274,13 +1281,13 @@ h4 {
 .style-card-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 6px;
+  margin-bottom: 6px;
 }
 
 .style-radio {
-  width: 17px;
-  height: 17px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   border: 2px solid #cbd5e1;
   background: #ffffff;
@@ -1297,14 +1304,14 @@ h4 {
 
 .style-radio.checked::after {
   content: "";
-  width: 9px;
-  height: 9px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #2563eb;
 }
 
 .style-name {
-  font-size: 13.5px;
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.01em;
@@ -1313,14 +1320,14 @@ h4 {
 /* Dark Preview Container inside each card */
 .style-preview-box {
   background: #0f172a;
-  border-radius: 10px;
-  height: 64px;
+  border-radius: 8px;
+  height: clamp(38px, 5vh, 56px);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  padding: 8px;
+  padding: 4px;
 }
 
 /* Mini Nav Bars inside the Preview Box */
