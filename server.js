@@ -56,13 +56,31 @@ app.post('/api/preview', limiter, async (req, res) => {
         productUrl: '',
       };
     } else {
-      const homeUrl = normalizeUrl(raw);
-      await assertPublicUrl(homeUrl);
+      const rawUrl = normalizeUrl(raw);
+      await assertPublicUrl(rawUrl);
+
+      const parsed = new URL(rawUrl);
+      let homeUrl = `${parsed.protocol}//${parsed.host}/`;
+      let collectionUrl = await optionalUrl(body.collectionUrl);
+      let productUrl = await optionalUrl(body.productUrl);
+
+      const pathname = parsed.pathname.toLowerCase();
+      const isColl = /\/(collections?|category|categories|shop|catalog)\/[^/?#]+/i.test(pathname);
+      const isProd = /\/(products?|p|item|items|dp)\/[^/?#]+/i.test(pathname);
+
+      if (isColl) {
+        if (!collectionUrl) collectionUrl = rawUrl;
+      } else if (isProd) {
+        if (!productUrl) productUrl = rawUrl;
+      } else {
+        homeUrl = rawUrl;
+      }
+
       input = {
         demo: false,
         homeUrl,
-        collectionUrl: await optionalUrl(body.collectionUrl),
-        productUrl: await optionalUrl(body.productUrl),
+        collectionUrl,
+        productUrl,
       };
     }
 

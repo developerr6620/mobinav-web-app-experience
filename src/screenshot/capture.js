@@ -124,34 +124,24 @@ async function capturePreview(job, setStep) {
   const urlOf = (name) => `/images/${job.id}/${name}`;
 
   const browser = await getBrowser();
-  const context = await browser.newContext({
-    viewport: { width: W, height: H },
-    deviceScaleFactor: config.DEVICE_SCALE,
-    isMobile: true,
-    hasTouch: true,
-    userAgent: config.USER_AGENT,
-    locale: 'en-US',
-  });
-  await context.addInitScript(() => {
-    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-  });
-  job.ctx = context;
 
-  await context.route('**/*', async (route) => {
-    const req = route.request();
-    const url = req.url();
-    if (!/^https?:/i.test(url)) return route.continue();
-    if (req.resourceType() === 'media') return route.abort();
-    try {
-      const allowLocal = job.demo && new URL(url).host === LOCAL_HOST;
-      await assertPublicUrl(url, { allowLocal });
-    } catch {
-      return route.abort('blockedbyclient');
-    }
-    return route.continue();
-  });
+  const getPage = async () => {
+    const ctx = await browser.newContext({
+      viewport: { width: W, height: H },
+      deviceScaleFactor: config.DEVICE_SCALE,
+      isMobile: true,
+      hasTouch: true,
+      userAgent: config.USER_AGENT,
+      locale: 'en-US',
+    });
+    await ctx.addInitScript(() => {
+      Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+    });
+    job.ctx = ctx;
+    const p = await ctx.newPage();
+    return { ctx, p };
+  };
 
-  const page = await context.newPage();
   const missing = [];
   const images = { home: null, collectionBefore: null, collectionAfter: null, product: null };
   const urls = { home: job.input.homeUrl, collection: null, product: null };
@@ -160,32 +150,53 @@ async function capturePreview(job, setStep) {
     // 1) HOME
     setStep(0, 'Opening your store');
     let homeUrl = job.input.homeUrl;
-    try {
-      await open(page, homeUrl);
-    } catch (err) {
-      const u = new URL(homeUrl);
-      const altHost = u.hostname.startsWith('www.') ? u.hostname.replace(/^www\./i, '') : `www.${u.hostname}`;
-      const altUrl = `${u.protocol}//${altHost}${u.pathname}${u.search}`;
+    let home = { links: [], storeName: '', themeColor: '' };
+    {
+      const { ctx, p } = await getPage();
       try {
-        await open(page, altUrl);
-        homeUrl = altUrl;
-      } catch {
-        throw err;
+        try {
+          await open(p, homeUrl);
+        } catch (err) {
+          const u = new URL(homeUrl);
+          const altHost = u.hostname.startsWith('www.') ? u.hostname.replace(/^www\./i, '') : `www.${u.hostname}`;
+          const altUrl = `${u.protocol}//${altHost}${u.pathname}${u.search}`;
+          try {
+            await open(p, altUrl);
+            homeUrl = altUrl;
+          } catch {
+            throw err;
+          }
+        }
+        await shot(p, file('home.jpg'));
+        images.home = urlOf('home.jpg');
+        homeUrl = p.url();
+        urls.home = homeUrl;
+        home = await extractHome(p);
+      } finally {
+        await ctx.close().catch(() => {});
+        job.ctx = null;
       }
     }
-    await shot(page, file('home.jpg'));
-    images.home = urlOf('home.jpg');
-    homeUrl = page.url();
-    urls.home = homeUrl;
+
     const origin = new URL(homeUrl).origin;
-    const home = await extractHome(page);
 
     // 2) COLLECTION
     setStep(1, 'Capturing collection page');
-    let collectionUrl =
-      job.input.collectionUrl ||
-      pickLink(home.links, 'collection', homeUrl, [homeUrl]) ||
-      (await fromSitemap(context.request, origin, 'collection'));
+    let collectionUrl = job.input.collectionUrl;
+
+    if (!collectionUrl) {
+      collectionUrl = pickLink(home.links, 'collection', homeUrl, [homeUrl]);
+    }
+
+    if (!collectionUrl) {
+      const { ctx: reqCtx } = await getPage();
+      try {
+        collectionUrl = await fromSitemap(reqCtx.request, origin, 'collection');
+      } finally {
+        await reqCtx.close().catch(() => {});
+        job.ctx = null;
+      }
+    }
 
     // Intelligent fallback for collection page if not found in links or sitemap
     if (!collectionUrl) {
@@ -196,57 +207,83 @@ async function capturePreview(job, setStep) {
         `${origin}/products`,
         `${origin}/catalog`
       ];
-      for (const cand of candidates) {
-        try {
-          const testRes = await context.request.get(cand, { timeout: 6000 });
-          if (testRes.ok() && testRes.status() === 200) {
-            collectionUrl = cand;
-            break;
-          }
-        } catch { /* continue */ }
+      const { ctx: testCtx } = await getPage();
+      try {
+        for (const cand of candidates) {
+          try {
+            const testRes = await testCtx.request.get(cand, { timeout: 6000 });
+            if (testRes.ok() && testRes.status() === 200) {
+              collectionUrl = cand;
+              break;
+            }
+          } catch { /* continue */ }
+        }
+      } finally {
+        await testCtx.close().catch(() => {});
+        job.ctx = null;
       }
     }
 
     let collection = null;
     if (collectionUrl) {
+      const { ctx, p } = await getPage();
       try {
-        await open(page, collectionUrl);
-        await shot(page, file('collection-before.jpg'));
+        await open(p, collectionUrl);
+        await shot(p, file('collection-before.jpg'));
         images.collectionBefore = urlOf('collection-before.jpg');
         urls.collection = collectionUrl;
-        collection = await extractCollection(page);
+        collection = await extractCollection(p);
       } catch (err) {
         if (err.code === 'TIMEOUT') throw err;
         console.warn(`[job ${job.id}] collection failed: ${err.message}`);
+      } finally {
+        await ctx.close().catch(() => {});
+        job.ctx = null;
       }
     }
     if (!images.collectionBefore) missing.push('collection');
 
     // 3) PRODUCT
     setStep(2, 'Capturing product page');
-    let productUrl =
-      job.input.productUrl ||
-      (collection && pickLink(collection.links, 'product', homeUrl)) ||
-      pickLink(home.links, 'product', homeUrl) ||
-      (await fromSitemap(context.request, origin, 'product'));
+    let productUrl = job.input.productUrl;
+
+    if (!productUrl && collection && collection.links) {
+      productUrl = pickLink(collection.links, 'product', homeUrl);
+    }
+    if (!productUrl && home.links) {
+      productUrl = pickLink(home.links, 'product', homeUrl);
+    }
+    if (!productUrl) {
+      const { ctx: reqCtx } = await getPage();
+      try {
+        productUrl = await fromSitemap(reqCtx.request, origin, 'product');
+      } finally {
+        await reqCtx.close().catch(() => {});
+        job.ctx = null;
+      }
+    }
 
     // Intelligent fallback for product page: inspect collection links for product URLs
     if (!productUrl && collection && collection.links) {
-      const cand = collection.links.find(l => /\/products?\/[^/?#]+/i.test(l.href) || /\/p\/[^/?#]+/i.test(l.href));
+      const cand = collection.links.find((l) => /\/products?\/[^/?#]+/i.test(l.href) || /\/p\/[^/?#]+/i.test(l.href));
       if (cand) productUrl = cand.href;
     }
 
     let product = null;
     if (productUrl) {
+      const { ctx, p } = await getPage();
       try {
-        await open(page, productUrl);
-        await shot(page, file('product.jpg'));
+        await open(p, productUrl);
+        await shot(p, file('product.jpg'));
         images.product = urlOf('product.jpg');
         urls.product = productUrl;
-        product = await extractProduct(page);
+        product = await extractProduct(p);
       } catch (err) {
         if (err.code === 'TIMEOUT') throw err;
         console.warn(`[job ${job.id}] product failed: ${err.message}`);
+      } finally {
+        await ctx.close().catch(() => {});
+        job.ctx = null;
       }
     }
     if (!images.product) missing.push('product');
@@ -257,32 +294,37 @@ async function capturePreview(job, setStep) {
     const brand = brandColor || '#5b3df5';
     if (images.collectionBefore) {
       const homeCols = collectionLinks(home.links, homeUrl);
-      let items = homeCols.concat(collectionLinks(collection.links, homeUrl));
+      let items = homeCols.concat(collection ? collectionLinks(collection.links, homeUrl) : []);
       const seen = new Set();
       items = items.filter((i) => !seen.has(i.label.toLowerCase()) && seen.add(i.label.toLowerCase())).slice(0, 8);
       for (const l of FALLBACK_LABELS) {
         if (items.length >= 5) break;
         if (!seen.has(l.toLowerCase())) items.push({ href: '', label: l, img: '' });
       }
-      const pool = (collection.images || []).slice();
+      const pool = collection && collection.images ? collection.images.slice() : [];
       items = items.map((it, i) => ({ label: it.label, img: it.img || pool[i] || '' }));
       const here = new URL(collectionUrl).pathname.replace(/\/$/, '');
       let activeIndex = homeCols.findIndex((c) => new URL(c.href).pathname.replace(/\/$/, '') === here);
       if (activeIndex < 0 || activeIndex >= items.length) activeIndex = 0;
 
+      const { ctx, p } = await getPage();
       try {
-        await open(page, collectionUrl);
-        await injectStoryStrip(page, {
-          items, activeIndex,
-          title: collection.title || items[activeIndex].label,
+        await open(p, collectionUrl);
+        await injectStoryStrip(p, {
+          items,
+          activeIndex,
+          title: (collection && collection.title) || items[activeIndex].label,
           brand,
         });
-        await shot(page, file('collection-after.jpg'));
+        await shot(p, file('collection-after.jpg'));
         images.collectionAfter = urlOf('collection-after.jpg');
       } catch (err) {
         if (err.code === 'TIMEOUT') throw err;
         console.warn(`[job ${job.id}] story strip failed: ${err.message}`);
         images.collectionAfter = images.collectionBefore;
+      } finally {
+        await ctx.close().catch(() => {});
+        job.ctx = null;
       }
     }
 
@@ -293,11 +335,15 @@ async function capturePreview(job, setStep) {
       price: product ? formatPrice(product.price, product.currency) : '',
       productTitle: product ? product.title : '',
       collectionTitle: collection ? collection.title : '',
-      images, urls, missing,
+      images,
+      urls,
+      missing,
     };
   } finally {
-    await context.close().catch(() => {});
-    job.ctx = null;
+    if (job.ctx) {
+      await job.ctx.close().catch(() => {});
+      job.ctx = null;
+    }
   }
 }
 
